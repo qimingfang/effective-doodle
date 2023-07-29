@@ -28,7 +28,8 @@ env:
   NODE_VERSION: "16.14.2" # set this to the node version to use
 
 permissions:
-  contents: read
+  # needed to bump version
+  contents: write
 
 jobs:
   deploy:
@@ -51,6 +52,21 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
+
+      - name: Automated Version Bump
+        uses: phips28/gh-action-bump-version@v10.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          # SENTRY_URL: https://sentry.io/
+        with:
+          environment: production
 
       - name: "Deploy to Azure WebApp"
         id: deploy-to-webapp
