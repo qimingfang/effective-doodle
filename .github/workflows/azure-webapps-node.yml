@@ -67,6 +67,7 @@ jobs:
           # SENTRY_URL: https://sentry.io/
         with:
           environment: production
+          ignore_missing: true
 
       - name: "Deploy to Azure WebApp"
         id: deploy-to-webapp
