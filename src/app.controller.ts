@@ -1,11 +1,10 @@
 import { Controller, Get } from "@nestjs/common";
 import { pick } from "lodash";
-import { InjectSentry, SentryService } from "@travelerdev/nestjs-sentry";
 import packageJSON from "../package.json";
 
 @Controller()
 export class AppController {
-  constructor(@InjectSentry() private readonly client: SentryService) {}
+  constructor() {}
 
   @Get("/status")
   async getStatus() {
